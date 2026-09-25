@@ -23,6 +23,7 @@ Copia `.env.example` a `.env.local` y rellena:
 | `NEXT_PUBLIC_SUPABASE_URL` | Sí | URL del proyecto (Project Settings → API → Project URL) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Sí | Clave pública (anon / publishable key) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Sí | Clave de servicio (solo servidor, nunca en el cliente) |
+| `THESPORTSDB_KEY` | No | Clave de TheSportsDB para escudos (por defecto usa la pública `3`) |
 
 ## Base de datos
 

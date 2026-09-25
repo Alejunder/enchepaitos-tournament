@@ -27,6 +27,7 @@ type TournamentCountRow = Tournament & {
 type ParticipantJoinRow = {
   user_id: string;
   team_name: string;
+  team_logo_url: string | null;
   profiles: { username: string } | { username: string }[] | null;
 };
 
@@ -114,7 +115,7 @@ export async function getParticipants(
 
   const { data, error } = await supabase
     .from("tournament_participants")
-    .select("user_id, team_name, profiles(username)")
+    .select("user_id, team_name, team_logo_url, profiles(username)")
     .eq("tournament_id", tournamentId);
 
   if (error) {
@@ -127,6 +128,7 @@ export async function getParticipants(
     userId: row.user_id,
     username: extractUsername(row.profiles),
     teamName: row.team_name,
+    teamLogoUrl: row.team_logo_url,
   }));
 }
 

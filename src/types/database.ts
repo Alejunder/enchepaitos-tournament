@@ -79,16 +79,46 @@ export interface Database {
           tournament_id: string;
           user_id: string;
           team_name: string;
+          team_logo_url: string | null;
+          team_provider_id: string | null;
         };
         Insert: {
           tournament_id: string;
           user_id: string;
           team_name: string;
+          team_logo_url?: string | null;
+          team_provider_id?: string | null;
         };
         Update: {
           tournament_id?: string;
           user_id?: string;
           team_name?: string;
+          team_logo_url?: string | null;
+          team_provider_id?: string | null;
+        };
+        Relationships: [];
+      };
+      teams: {
+        Row: {
+          provider_id: string;
+          name: string;
+          logo_url: string | null;
+          country: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          provider_id: string;
+          name: string;
+          logo_url?: string | null;
+          country?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          provider_id?: string;
+          name?: string;
+          logo_url?: string | null;
+          country?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };

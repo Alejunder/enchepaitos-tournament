@@ -155,6 +155,7 @@ export default async function AdminTournamentDetailPage({
                     tournamentId={tournament.id}
                     userId={participant.userId}
                     teamName={participant.teamName}
+                    teamLogoUrl={participant.teamLogoUrl}
                   />
                 </li>
               ))}

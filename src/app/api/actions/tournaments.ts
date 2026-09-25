@@ -101,6 +101,8 @@ export async function createTournament(
 export async function enrollInTournament(
   tournamentId: string,
   teamName: string,
+  teamLogoUrl?: string | null,
+  teamProviderId?: string | null,
 ): Promise<ActionResult> {
   const profile = await getCurrentProfile();
 
@@ -155,6 +157,8 @@ export async function enrollInTournament(
     tournament_id: tournamentId,
     user_id: profile.id,
     team_name: teamName.trim(),
+    team_logo_url: teamLogoUrl ?? null,
+    team_provider_id: teamProviderId ?? null,
   });
 
   if (error) {
@@ -463,6 +467,8 @@ export async function updateParticipantTeam(
   tournamentId: string,
   userId: string,
   teamName: string,
+  teamLogoUrl?: string | null,
+  teamProviderId?: string | null,
 ): Promise<ActionResult> {
   const denied = await requireAdmin();
   if (denied) {
@@ -478,7 +484,11 @@ export async function updateParticipantTeam(
 
   const { error } = await supabase
     .from("tournament_participants")
-    .update({ team_name: teamName.trim() })
+    .update({
+      team_name: teamName.trim(),
+      team_logo_url: teamLogoUrl ?? null,
+      team_provider_id: teamProviderId ?? null,
+    })
     .eq("tournament_id", tournamentId)
     .eq("user_id", userId);
 
@@ -510,6 +520,8 @@ export async function addParticipant(
   tournamentId: string,
   userId: string,
   teamName: string,
+  teamLogoUrl?: string | null,
+  teamProviderId?: string | null,
 ): Promise<ActionResult> {
   const denied = await requireAdmin();
   if (denied) {
@@ -535,6 +547,8 @@ export async function addParticipant(
     tournament_id: tournamentId,
     user_id: userId,
     team_name: teamName.trim(),
+    team_logo_url: teamLogoUrl ?? null,
+    team_provider_id: teamProviderId ?? null,
   });
 
   if (error) {

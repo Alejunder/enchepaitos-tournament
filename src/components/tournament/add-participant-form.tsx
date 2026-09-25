@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { addParticipant } from "@/app/api/actions/tournaments";
-import { Input } from "@/components/ui/input";
+import {
+  TeamPicker,
+  type TeamSelection,
+} from "@/components/tournament/team-picker";
 import { SaveButton, type SaveState } from "@/components/ui/save-button";
 
 export function AddParticipantForm({
@@ -17,7 +20,11 @@ export function AddParticipantForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [userId, setUserId] = useState("");
-  const [teamName, setTeamName] = useState("");
+  const [team, setTeam] = useState<TeamSelection>({
+    name: "",
+    logoUrl: null,
+    providerId: null,
+  });
   const [state, setState] = useState<SaveState>("dirty");
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +33,13 @@ export function AddParticipantForm({
     setState("saving");
 
     startTransition(async () => {
-      const result = await addParticipant(tournamentId, userId, teamName);
+      const result = await addParticipant(
+        tournamentId,
+        userId,
+        team.name,
+        team.logoUrl,
+        team.providerId,
+      );
 
       if (!result.success) {
         setError(result.error);
@@ -36,7 +49,7 @@ export function AddParticipantForm({
 
       setError(null);
       setUserId("");
-      setTeamName("");
+      setTeam({ name: "", logoUrl: null, providerId: null });
       setState("saved");
       router.refresh();
     });
@@ -70,22 +83,19 @@ export function AddParticipantForm({
         ))}
       </select>
 
-      <div className="flex gap-2">
-        <Input
-          value={teamName}
-          onChange={(event) => {
-            setTeamName(event.target.value);
-            setState("dirty");
-          }}
-          placeholder="Equipo de FL26"
-          className="h-9 text-sm"
-        />
-        <SaveButton
-          state={isPending ? "saving" : state}
-          dirtyLabel="Añadir"
-          savedLabel="Añadido ✓"
-        />
-      </div>
+      <TeamPicker
+        placeholder="Equipo de FL26"
+        onChange={(value) => {
+          setTeam(value);
+          setState("dirty");
+        }}
+      />
+
+      <SaveButton
+        state={isPending ? "saving" : state}
+        dirtyLabel="Añadir"
+        savedLabel="Añadido ✓"
+      />
 
       {error && <p className="text-xs text-red-400">{error}</p>}
     </form>

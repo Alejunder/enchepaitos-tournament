@@ -17,6 +17,7 @@ export function buildStandings(
       userId: participant.userId,
       username: participant.username,
       teamName: participant.teamName,
+      teamLogoUrl: participant.teamLogoUrl ?? null,
       played: 0,
       won: 0,
       drawn: 0,

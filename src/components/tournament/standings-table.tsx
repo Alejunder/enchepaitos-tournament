@@ -1,3 +1,4 @@
+import { TeamBadge } from "@/components/ui/team-badge";
 import { cn } from "@/lib/utils";
 import type { StandingRow } from "@/types";
 
@@ -34,7 +35,10 @@ export function StandingsTable({ standings }: { standings: StandingRow[] }) {
               <td className="px-3 py-2 text-chalk/50">{index + 1}</td>
               <td className="px-3 py-2 font-medium text-chalk">
                 {row.username}{" "}
-                <span className="text-chalk/50">({row.teamName})</span>
+                <span className="inline-flex items-center gap-1.5 align-middle text-chalk/50">
+                  <TeamBadge src={row.teamLogoUrl} name={row.teamName} />
+                  ({row.teamName})
+                </span>
               </td>
               <td className="px-3 py-2 text-center">{row.played}</td>
               <td className="px-3 py-2 text-center">{row.won}</td>

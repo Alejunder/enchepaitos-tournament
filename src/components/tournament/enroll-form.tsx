@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { enrollInTournament } from "@/app/api/actions/tournaments";
-import { Input } from "@/components/ui/input";
+import { TeamPicker } from "@/components/tournament/team-picker";
 import { SaveButton, type SaveState } from "@/components/ui/save-button";
 
 export function EnrollForm({ tournamentId }: { tournamentId: string }) {
@@ -14,11 +14,21 @@ export function EnrollForm({ tournamentId }: { tournamentId: string }) {
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit(formData: FormData) {
-    const teamName = String(formData.get("teamName") ?? "");
+    const teamName = String(formData.get("teamName") ?? "").trim();
+    const teamLogoUrl =
+      String(formData.get("teamLogoUrl") ?? "").trim() || null;
+    const teamProviderId =
+      String(formData.get("teamProviderId") ?? "").trim() || null;
+
     setState("saving");
 
     startTransition(async () => {
-      const result = await enrollInTournament(tournamentId, teamName);
+      const result = await enrollInTournament(
+        tournamentId,
+        teamName,
+        teamLogoUrl,
+        teamProviderId,
+      );
 
       if (!result.success) {
         setError(result.error);
@@ -34,15 +44,12 @@ export function EnrollForm({ tournamentId }: { tournamentId: string }) {
 
   return (
     <form action={handleSubmit} className="flex flex-wrap items-start gap-3">
-      <Input
-        name="teamName"
-        placeholder="Tu equipo de FL26 (obligatorio)"
-        required
-        minLength={2}
-        maxLength={40}
-        className="max-w-xs"
-        onChange={() => setState("dirty")}
-      />
+      <div className="w-full max-w-xs">
+        <TeamPicker
+          placeholder="Tu equipo de FL26 (obligatorio)"
+          onDirty={() => setState("dirty")}
+        />
+      </div>
       <SaveButton
         state={isPending ? "saving" : state}
         dirtyLabel="Inscribirme"

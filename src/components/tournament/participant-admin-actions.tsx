@@ -7,26 +7,41 @@ import {
   removeParticipant,
   updateParticipantTeam,
 } from "@/app/api/actions/tournaments";
+import {
+  TeamPicker,
+  type TeamSelection,
+} from "@/components/tournament/team-picker";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export function ParticipantAdminActions({
   tournamentId,
   userId,
   teamName,
+  teamLogoUrl,
 }: {
   tournamentId: string;
   userId: string;
   teamName: string;
+  teamLogoUrl: string | null | undefined;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [team, setTeam] = useState(teamName);
+  const [team, setTeam] = useState<TeamSelection>({
+    name: teamName,
+    logoUrl: teamLogoUrl ?? null,
+    providerId: null,
+  });
   const [error, setError] = useState<string | null>(null);
 
   function saveTeam() {
     startTransition(async () => {
-      const result = await updateParticipantTeam(tournamentId, userId, team);
+      const result = await updateParticipantTeam(
+        tournamentId,
+        userId,
+        team.name,
+        team.logoUrl,
+        team.providerId,
+      );
 
       if (!result.success) {
         setError(result.error);
@@ -58,12 +73,14 @@ export function ParticipantAdminActions({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Input
-        value={team}
-        onChange={(event) => setTeam(event.target.value)}
-        className="h-8 w-40 text-xs"
-        aria-label="Nombre del equipo"
-      />
+      <div className="w-44">
+        <TeamPicker
+          initialName={teamName}
+          initialLogo={teamLogoUrl ?? null}
+          inputClassName="h-8 text-xs"
+          onChange={setTeam}
+        />
+      </div>
       <Button size="sm" disabled={isPending} onClick={saveTeam}>
         Guardar
       </Button>

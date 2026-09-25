@@ -28,6 +28,7 @@ export interface Participant {
   userId: string;
   username: string;
   teamName: string;
+  teamLogoUrl?: string | null;
 }
 
 export interface ScheduledMatch {
@@ -64,6 +65,7 @@ export interface StandingRow {
   userId: string;
   username: string;
   teamName: string;
+  teamLogoUrl?: string | null;
   played: number;
   won: number;
   drawn: number;

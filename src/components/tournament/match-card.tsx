@@ -1,3 +1,4 @@
+import { TeamBadge } from "@/components/ui/team-badge";
 import { cn } from "@/lib/utils";
 import type { Participant } from "@/types";
 
@@ -77,7 +78,18 @@ function TeamSide({
       >
         {participant ? participant.username : "—"}
       </span>
-      <span className={cn(big ? "text-sm" : "text-xs", "text-chalk/50")}>
+      <span
+        className={cn(
+          "flex items-center gap-1",
+          align === "right" ? "flex-row-reverse" : "flex-row",
+          big ? "text-sm" : "text-xs",
+          "text-chalk/50",
+        )}
+      >
+        <TeamBadge
+          src={participant?.teamLogoUrl}
+          name={participant?.teamName ?? "—"}
+        />
         {participant ? participant.teamName : "-"}
       </span>
       <span
